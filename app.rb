@@ -17,6 +17,22 @@ class App < Sinatra::Base
     @db.results_as_hash=true
   end
 
+  def login_amazon
+    sess=Patron::Session.new
+    sess.base_url="http://sellercentral.amazon.com/"
+    response=sess.get "/gp/homepage.html"
+    html_doc=Nokogiri::HTML(response.body)
+    form=html_doc.css("form")
+    sessid=form.xpath("//input[@name='session-id']/@value").first.value
+
+    row=[{"protocol" => "https", "action" => "sign-in",
+      "sessid" => sessid, "email" => "kingdon@tuesdaystudios.com",
+      "destination" => "https://sellercentral.amazon.com/gp/homepage.html?ie=UTF8&amp;%2AVersion%2A=1&amp;%2Aentries%2A=0",
+      "optin" => "1", "ouid" => "01", "password" => File.new("pass","r").gets }]
+    puts row
+    row
+  end
+
   set :mustache, {
     :views     => 'views/',
     :templates => 'templates/'
@@ -39,14 +55,7 @@ class App < Sinatra::Base
     mustache :hello
   end
   get '/document*' do |path|
-	#row=[{"table_schema" => path}]
-	sess=Patron::Session.new
-	sess.base_url="http://sellercentral.amazon.com/"
-	response=sess.get path
-	html_doc=Nokogiri::HTML(response.body)
-	form=html_doc.css("form")
-	row=[{"url" => html_doc.title, "body" => form}]
-	
+    row=[{"body" => login_amazon[0]["password"]}]
     Views::Document::have ( row )
     mustache :document, :layout => false
   end

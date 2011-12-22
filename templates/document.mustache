@@ -1,14 +1,1 @@
-{{#got}}
-<pre>
-<div
-  style="margin: 3px; padding: 5px; text-align: center;
-  width: 405px; border: 2px solid black; float: left;
-  background-color: white"
-  ><b style="">{{url}}</b>
-<hr style="margin: 5px 0 -12px 0"/> <div
-  style="text-align: left"
-  > + `{{body}}`</div></div>{{/got}}
-<div style="clear: both"/>
-{{^have}}
-No documentation found :(
-{{/have}}
+{{#got}}{{{body}}}{{/got}}{{^have}} No documentation found :( {{/have}}
