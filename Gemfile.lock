@@ -4,6 +4,8 @@ GEM
     awesome_print (1.0.2)
     mustache (0.99.4)
     mysql2 (0.3.11)
+    nokogiri (1.5.0)
+    patron (0.4.16)
     rack (1.2.2)
     shotgun (0.9)
       rack (>= 1.0)
@@ -22,6 +24,8 @@ DEPENDENCIES
   awesome_print
   mustache
   mysql2
+  nokogiri
+  patron
   shotgun
   sinatra
   sqlite3-ruby
