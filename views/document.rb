@@ -1,6 +1,6 @@
 class App
   module Views
-    class Hello < Mustache
+    class Document < Mustache
       @@have=nil
       def self.have(got)
         @@have=got

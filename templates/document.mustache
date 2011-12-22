@@ -1,16 +1,14 @@
-{{#have}}
-{{id}}
-{{table_schema}}
-{{table_name}}
-{{column_name}}
-{{definition}}
-{{notes}}
-{{status}}
-{{editable}}
-{{deprecated_at}}
-{{created_at}}
-{{updated_at}}
-{{/have}}
+{{#got}}
+<pre>
+<div
+  style="margin: 3px; padding: 5px; text-align: center;
+  width: 405px; border: 2px solid black; float: left;
+  background-color: white"
+  ><b style="">{{table_schema}}</b>
+<hr style="margin: 5px 0 -12px 0"/> <div
+  style="text-align: left"
+  > + `{{table_name}}`.`{{column_name}}`</div></div>{{/got}}
+<div style="clear: both"/>
 {{^have}}
 No documentation found :(
 {{/have}}

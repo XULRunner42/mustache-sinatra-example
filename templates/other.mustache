@@ -1,8 +1,13 @@
 <style>
-pre { text-align: left }
 </style>
 
-<pre>{{rows}}</pre>
+{{{row_ai}}}
+{{#rows}}
+<table style="float: left; margin: 10px; border: 1px; padding: 2px;">
+  <tr><th><b>{{table_schema}}.{{table_name}}</b></th></tr>
+  <tr><td><em>{{column_name}}</em></td></table>
+{{/rows}}
+<br style="clear: both"/>
 <pre>{{ascii_art}}</pre>
 
 <a href="/">Home</a>

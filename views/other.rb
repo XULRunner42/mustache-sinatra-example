@@ -1,11 +1,29 @@
+require 'awesome_print'
+#require 'pp'
+#require 'stringio'
+
+=begin
+def my_pp(*args)
+  old_out = $stdout
+  begin
+    s=StringIO.new
+    $stdout=s
+    pp(*args)
+  ensure
+    $stdout=old_out
+  end
+  s.string
+end
+=end
+
 class App
   module Views
     class Other < Mustache
       def rows
-        @db.execute("create table if not exists test (foo, bar, baz)")
-        #@db.execute("insert into test values (1, 2, 3)")
-        #@db.execute("update test set foo=1, bar=2, baz=3")
-        @db.execute("select * from test limit 7")
+        @db.execute("select * from to_document limit 7")
+      end
+      def row_ai
+        @db.execute("select * from to_document limit 7").ai(:html=>true)
       end
       def ascii_art
         <<-end_art
@@ -16,10 +34,10 @@ class App
 .............77OOOOOOOOOOOOO,,                  ~=8OOOOOOOOOOO8++
 .............778OOOOOOOOOOOOII..               .ZZOOOOOOOOOOOOO++
 .............77OOOOOOOOOOOOOO8$.             .:O8OOOOOOOOOOOOO8++
-            .77OOOOOOOOOOOOO88O+.            ..788OOOOOOOOOOOOO8++.......
+            .77OOOOOOOOOOOOO88O+.           ..788OOOOOOOOOOOOO8++.......
             .778OOOOOOOOOOOOOO8O,           .=OOOOOOOOOOOOOOOO8++.......
             .77OOOOOOOOOOOOOOOOO7.         .,ZOOOOOOOOOOOOOOOOO++.......
-            .77OOOOOOOOOOOOOOOOOOZ$..      :OZOOOOOOOOOOOOOOOOOO++.......
+            .77OOOOOOOOOOOOOOOOOOZ$..     :OZOOOOOOOOOOOOOOOOOO++.......
             .778OOOOOOOOOOOOOOOOOOO?.... .$OOOOOOOOOOOOOOOOOOOO++.......
             .77OOOOOOOOOOOOOOOOOOOOO: ...=O8OOOOOOOOOOOOOOOOOO8++.......
             .77OOOOOOOO8OOOOOOOOOOOO$...,OOOOOOOOOOO8OOOOOOOOO8++.......
