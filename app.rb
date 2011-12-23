@@ -12,11 +12,11 @@ class App < Sinatra::Base
   require 'nokogiri'
   require 'queryparams'
 
-  def initialize
-    super
-    @db=SQLite3::Database.new( "test.db" )
-    @db.results_as_hash=true
-  end
+#  def initialize
+#    super
+#    @db=SQLite3::Database.new( "test.db" )
+#    @db.results_as_hash=true
+#  end
 
   def pluck(str,elem)
     elem.xpath("//input[@name='#{str}']/@value").first.value
@@ -55,6 +55,9 @@ class App < Sinatra::Base
     sess
   end
 
+  # unshipped, neworders
+  # methods to request an order report is generated.
+  # what happens if you call them too often?
   def unshipped(sess)
     sess.post("/gp/upload-download-utils/requestReport.html",
       QueryParams.encode({ "type" => "UnshippedOrders" }))
@@ -62,6 +65,9 @@ class App < Sinatra::Base
   def neworders(sess)
     sess.post("/gp/upload-download-utils/requestReport.html",
       QueryParams.encode({ "type" => "Orders", "days" => "30" }))
+  end
+  def order_pickup(sess)
+    sess.get("/gp/transactions/orderPickup.html").body
   end
 
   set :mustache, {
@@ -78,20 +84,15 @@ class App < Sinatra::Base
     mustache :other
   end
 
-  get '/hello' do
-    mustache :hello
-  end
-  post '/hello' do
-    Views::Hello::have ([params[:foo], params[:bar], params[:baz]])
-    mustache :hello
-  end
   get '/document*' do |path|
     #row=[{"body" => login_amazon}]
+    sess=nil
     #sess = login_amazon
-    #unshipped(sess)
-    #neworders(sess)
-    row=[{"body" => "no-op"}] #[{"body" => "success"}]
-    Views::Document::have ( row )
+    unshipped(sess)
+    neworders(sess)
+    #order=order_pickup(login_amazon)
+    #row=[{"body" => order}] #[{"body" => "success"}]
+    #Views::Document::have ( row )
     mustache :document, :layout => false
   end
 
