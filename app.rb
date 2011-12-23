@@ -22,6 +22,10 @@ class App < Sinatra::Base
     elem.xpath("//input[@name='#{str}']/@value").first.value
   end
 
+  def visit_unshipped(sess)
+    sess.get "/gp/orders-v2/list/ref=ag_myo_doa1_home?ie=UTF8&searchType=OrderStatus&ignoreSearchType=1&statusFilter=ItemsToShip&searchFulfillers=mfn&preSelectedRange=37&searchDateOption=preSelected&sortBy=OrderStatusDescending"
+  end
+
   def visit_amazon(sess)
     sess.timeout=10
     sess.handle_cookies("cookies.txt")
@@ -85,14 +89,17 @@ class App < Sinatra::Base
   end
 
   get '/document*' do |path|
-    #row=[{"body" => login_amazon}]
-    sess=nil
-    #sess = login_amazon
-    unshipped(sess)
-    neworders(sess)
+    sess = login_amazon
+    orders_page=visit_unshipped(sess)
+
+    html_doc=Nokogiri::HTML(orders_page.body)
+    content=html_doc.css("table.data-display")
+    #login=sess.post "/gp/sign-in/sign-in.html/ref=ag_login_lgin_home", param
+
+
     #order=order_pickup(login_amazon)
     #row=[{"body" => order}] #[{"body" => "success"}]
-    #Views::Document::have ( row )
+    Views::Document::have ( [{"body"=>content}] )
     mustache :document, :layout => false
   end
 
