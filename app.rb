@@ -10,6 +10,7 @@ class App < Sinatra::Base
   require 'sqlite3'
   require 'patron'
   require 'nokogiri'
+  require 'queryparams'
 
   def initialize
     super
@@ -17,20 +18,46 @@ class App < Sinatra::Base
     @db.results_as_hash=true
   end
 
-  def login_amazon
-    sess=Patron::Session.new
+  def pluck(str,elem)
+    elem.xpath("//input[@name='#{str}']/@value").first.value
+  end
+
+  def visit_amazon(sess)
+    sess.timeout=10
+    sess.handle_cookies("cookies.txt")
     sess.base_url="http://sellercentral.amazon.com/"
     response=sess.get "/gp/homepage.html"
+  end
+
+  def build_login(form)
+    sessid=pluck("session-id", form)
+    protocol=pluck("protocol", form)
+    action=pluck("action", form)
+    email="kingdon@tuesdaystudios.com"
+    destination=pluck("destination", form)
+    optin=pluck("optin", form)
+    ouid=pluck("ouid", form)
+
+    data={ "session-id" => sessid, "protocol" => protocol, "action" => action, 
+      "email" => email, "destination" => destination, "optin" => optin,
+      "ouid" => ouid, "password" => File.new("pass","r").gets }
+    param=QueryParams.encode(data)
+  end
+
+  def login_amazon
+    sess=Patron::Session.new
+    response=visit_amazon(sess)
     html_doc=Nokogiri::HTML(response.body)
     form=html_doc.css("form")
-    sessid=form.xpath("//input[@name='session-id']/@value").first.value
+    param=build_login(form)
+    login=sess.post "/gp/sign-in/sign-in.html/ref=ag_login_lgin_home", param
+    #html_doc=Nokogiri::HTML(login.body)
+    sess
+  end
 
-    row=[{"protocol" => "https", "action" => "sign-in",
-      "sessid" => sessid, "email" => "kingdon@tuesdaystudios.com",
-      "destination" => "https://sellercentral.amazon.com/gp/homepage.html?ie=UTF8&amp;%2AVersion%2A=1&amp;%2Aentries%2A=0",
-      "optin" => "1", "ouid" => "01", "password" => File.new("pass","r").gets }]
-    puts row
-    row
+  def unshipped(sess)
+    sess.post("/gp/upload-download-utils/requestReport.html",
+      QueryParams.encode({ "type" => "UnshippedOrders"}))
   end
 
   set :mustache, {
@@ -55,8 +82,10 @@ class App < Sinatra::Base
     mustache :hello
   end
   get '/document*' do |path|
-    row=[{"body" => login_amazon[0]["password"]}]
-    Views::Document::have ( row )
+    #row=[{"body" => login_amazon}]
+    #unshipped(login_amazon)
+    #row=[{"body" => "success"}]
+    #Views::Document::have ( row )
     mustache :document, :layout => false
   end
 
