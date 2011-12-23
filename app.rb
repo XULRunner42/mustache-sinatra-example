@@ -57,7 +57,11 @@ class App < Sinatra::Base
 
   def unshipped(sess)
     sess.post("/gp/upload-download-utils/requestReport.html",
-      QueryParams.encode({ "type" => "UnshippedOrders"}))
+      QueryParams.encode({ "type" => "UnshippedOrders" }))
+  end
+  def neworders(sess)
+    sess.post("/gp/upload-download-utils/requestReport.html",
+      QueryParams.encode({ "type" => "Orders", "days" => "30" }))
   end
 
   set :mustache, {
@@ -83,9 +87,11 @@ class App < Sinatra::Base
   end
   get '/document*' do |path|
     #row=[{"body" => login_amazon}]
-    #unshipped(login_amazon)
-    #row=[{"body" => "success"}]
-    #Views::Document::have ( row )
+    #sess = login_amazon
+    #unshipped(sess)
+    #neworders(sess)
+    row=[{"body" => "no-op"}] #[{"body" => "success"}]
+    Views::Document::have ( row )
     mustache :document, :layout => false
   end
 
