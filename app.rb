@@ -1,22 +1,27 @@
 require 'sinatra/base'
 require 'mustache/sinatra'
+require 'uri'
 
 $: << "./"
 class App < Sinatra::Base
   register Mustache::Sinatra
   require 'views/layout'
-  require 'views/hello'
   require 'views/document'
+  require 'views/listing'
+  require 'views/flist'
+  require 'views/fieldedit'
   require 'sqlite3'
   require 'patron'
   require 'nokogiri'
   require 'queryparams'
+  require 'mysql2'
 
-#  def initialize
-#    super
-#    @db=SQLite3::Database.new( "test.db" )
-#    @db.results_as_hash=true
-#  end
+  def initialize
+    super
+    @file=SQLite3::Database.new( "test.db" )
+    @file.results_as_hash=true
+    @db=Mysql2::Client.new(:host => 'db0', :username => 'kbarrett',
+      :password => File.new("pass","r").gets, :database => 'schema_documentation')
 
   def pluck(str,elem)
     elem.xpath("//input[@name='#{str}']/@value").first.value
@@ -88,6 +93,11 @@ class App < Sinatra::Base
     mustache :other
   end
 
+  #get '/document*' do
+  #  row = @db.execute(
+  #    "select * from to_document" )
+  #  Views::Document::have ( row )
+  #  mustache :document
   get '/document*' do |path|
     sess = login_amazon
     orders_page=visit_unshipped(sess)
@@ -101,6 +111,49 @@ class App < Sinatra::Base
     #row=[{"body" => order}] #[{"body" => "success"}]
     Views::Document::have ( [{"body"=>content}] )
     mustache :document, :layout => false
+  end
+
+  get '/reports/undocumented/tables/mmi' do
+    param={"table_schema"=>"mmi1"}
+
+    Views::Listing::have(
+      Views::Listing::data(@db, param) )
+
+    mustache :listing
+  end
+
+  post '/reports/undocumented/fields/*.*.*' do
+    schema=params[:splat][0]
+    table=params[:splat][1]
+    column=params[:splat][2]
+
+    key=URI.escape("#{schema}.#{table}.#{column}")
+
+    schema=@db.escape(schema)
+    table=@db.escape(table)
+    column=@db.escape(column)
+
+    notes=@db.escape(params[:notes])
+    status=@db.escape(params[:status])
+
+    record = { "schema" => schema, "table" => table, "column" =>
+      column, "notes" => notes, "status" => status }
+
+    Views::Fieldedit::update(db, record)
+
+    redirect "/reports/undocumented/fields/#{key}"
+  end
+
+  get '/reports/undocumented/fields/*.*.*' do
+    Views::Fieldedit::have ( Views::Fieldedit::row(@db, params) ) 
+    mustache :fieldedit
+  end
+
+  get '/reports/undocumented/fields/*.*' do
+    data=Views::Flist::rows(@db, params)
+
+    Views::Flist::have ( data )
+    mustache :flist
   end
 
   get '/nolayout' do

@@ -1,0 +1,16 @@
+{{#have}}
+{{#got}}
+<h3>Summary:</h3>
+<div>({{total_undoc}}/{{total_listing}}) fields in <em>{{table_schema}}.{{table_name}}</em> remain undocumented.  The offenders are listed below.</div>
+<h3>Detail:</h3>
+<table style="margin: 10px; border: 1px; padding: 2px;">
+<tr><th>Field Name</th><th>Notes</th><th>Status</th><th>Edit</th><th>key</th></tr>
+{{#rows}}
+<tr><td>{{field_name}}</td><td>{{notes}}</td><td>{{status}}</td><td>{{{link}}}</td><td><code>{{key}}</code></td></tr>
+{{/rows}}
+{{^rows}}
+<tr><td colspan="4"><em>No Information provided</em>... job is done?</td></tr>
+{{/rows}}
+</table>
+{{/got}}
+{{/have}}

@@ -1,0 +1,21 @@
+{{#have}}
+<h4>Edit Field Documentation</h4>
+{{#got}}
+<pre>
+{{schema}}.{{table}}.{{column}}
+</pre>
+{{#row}}
+<form method="post">
+<input type=hidden value="{{schema}}" name="schema"/>
+<input type=hidden value="{{table}}" name="table"/>
+<input type=hidden value="{{column}}" name="column"/>
+<textarea cols="40" rows="4" name="notes">{{notes}}</textarea>
+<br/><input type="text" name="status" value="{{status}}"/>
+<button type="submit">Save</button>
+</form>
+{{/row}}
+{{/got}}
+{{/have}}
+{{^have}}
+No params :(
+{{/have}}
