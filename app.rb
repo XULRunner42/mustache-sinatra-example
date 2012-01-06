@@ -20,8 +20,7 @@ class App < Sinatra::Base
     super
     @file=SQLite3::Database.new( "test.db" )
     @file.results_as_hash=true
-    @db=Mysql2::Client.new(:host => 'db0', :username => 'kbarrett',
-      :password => File.new("pass","r").gets, :database => 'schema_documentation')
+  end
 
   def pluck(str,elem)
     elem.xpath("//input[@name='#{str}']/@value").first.value
