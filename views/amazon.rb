@@ -18,6 +18,12 @@ class App
         #html_doc=Nokogiri::HTML(login.body)
         sess
       end
+      def self.visit_amazon(sess)
+        sess.timeout=20
+        sess.handle_cookies("cookies.txt")
+        sess.base_url="http://sellercentral.amazon.com/"
+        response=sess.get "/gp/homepage.html"
+      end
 
       # unshipped, neworders
       # methods to request an order report is generated.
@@ -37,12 +43,6 @@ class App
         sess.get "/gp/orders-v2/list/ref=ag_myo_doa1_home?ie=UTF8&searchType=OrderStatus&ignoreSearchType=1&statusFilter=ItemsToShip&searchFulfillers=mfn&preSelectedRange=37&searchDateOption=preSelected&sortBy=OrderStatusDescending"
       end
 
-      def self.visit_amazon(sess)
-        sess.timeout=10
-        sess.handle_cookies("cookies.txt")
-        sess.base_url="http://sellercentral.amazon.com/"
-        response=sess.get "/gp/homepage.html"
-      end
 
       def self.build_login(form)
         sessid=pluck("session-id", form)

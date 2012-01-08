@@ -8,6 +8,8 @@ class App < Sinatra::Base
   require 'views/layout'
   require 'views/document'
   require 'views/amazon'
+  require 'views/bossservice'
+  require 'views/bosspayment'
   require 'views/listing'
   require 'views/flist'
   require 'views/fieldedit'
@@ -35,6 +37,16 @@ class App < Sinatra::Base
 
   get '/other' do
     mustache :other
+  end
+
+  get '/document/boss/payment*' do |path|
+    @title = "BOSS Payment History Report"
+
+    Views::Bosspayment::have ( [{"body"=>Views::Bosspayment::body}] )
+    mustache :bosspayment
+  end
+  get '/document/boss*' do |path|
+    #test
   end
 
   #get '/document*' do
