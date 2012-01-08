@@ -7,6 +7,7 @@ class App
 
         html_doc=Nokogiri::HTML(orders_page.body)
         content=html_doc.css("table.data-display")
+        {"body"=>content, "content" => order_download(sess)}
       end
       def self.login_amazon
         sess=Patron::Session.new
@@ -24,6 +25,12 @@ class App
         sess.base_url="http://sellercentral.amazon.com/"
         response=sess.get "/gp/homepage.html"
       end
+      def self.order_download(sess)
+        #response=order_pickup(sess)
+        response=sess.get("/gp/reports/documents/_GET_FLAT_FILE_ORDERS_DATA__5422442433.txt?ie=UTF8&contentType=text%2Fxls")
+        #p response.body
+        response.body
+      end
 
       # unshipped, neworders
       # methods to request an order report is generated.
@@ -36,7 +43,7 @@ class App
         sess.post("/gp/upload-download-utils/requestReport.html",
           QueryParams.encode({ "type" => "Orders", "days" => "30" }))
       end
-      def order_pickup(sess)
+      def self.order_pickup(sess)
         sess.get("/gp/transactions/orderPickup.html").body
       end
       def self.visit_unshipped(sess)

@@ -1,9 +1,6 @@
 class App
   module Views
     class Bosspayment < Bossservice
-      def self.links(str,elem)
-        elem.xpath("//td/a[@title='#{str}']/@href")
-      end
       def self.body
         sess = login_boss
         payment_page=visit_payment_history(sess)

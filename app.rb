@@ -10,6 +10,7 @@ class App < Sinatra::Base
   require 'views/amazon'
   require 'views/bossservice'
   require 'views/bosspayment'
+  require 'views/bossorders'
   require 'views/listing'
   require 'views/flist'
   require 'views/fieldedit'
@@ -39,6 +40,14 @@ class App < Sinatra::Base
     mustache :other
   end
 
+  get '/document/boss/orders*' do |path|
+    orders=Views::Bossorders::body
+    #orders.each do|form|
+    #end
+
+    Views::Bossorders::have ( [{"body"=>orders}] )
+    mustache :bossorders
+  end
   get '/document/boss/payment*' do |path|
     @title = "BOSS Payment History Report"
 
@@ -74,9 +83,9 @@ class App < Sinatra::Base
   #  Views::Document::have ( row )
   #  mustache :document
   get '/document*' do |path|
-    @title = "Amazon Unshipped Order Report (raw)"
+    @title = "Amazon 120-days Order Report (raw)"
 
-    Views::Document::have ( [{"body"=>Views::Amazon::body}] )
+    Views::Document::have ( [Views::Amazon::body] )
     mustache :document
   end
 

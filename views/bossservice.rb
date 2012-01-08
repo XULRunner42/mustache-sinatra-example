@@ -1,6 +1,9 @@
 class App
   module Views
     class Bossservice < Document
+      def self.links(str,elem)
+        elem.xpath("//td/a[@title='#{str}']/@href")
+      end
       def self.login_boss
         sess=Patron::Session.new
         response=visit_boss(sess)
