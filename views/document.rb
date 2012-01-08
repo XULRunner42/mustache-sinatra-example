@@ -11,6 +11,9 @@ class App
       def got
         @@have
       end
+      def self.pluck(str,elem)
+        elem.xpath("//input[@name='#{str}']/@value").first.value
+      end
     end
   end
 end
