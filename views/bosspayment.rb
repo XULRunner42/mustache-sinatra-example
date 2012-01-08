@@ -12,14 +12,17 @@ class App
         content=html_doc.css("div#main-body")
         dir=[]
         links('View',content).each do|link|
-          l={"link" => link} 
-          dir << l
-          p l
+          htm=Nokogiri::HTML(visit_payment_link(sess,link).body)
+          pay=htm.css("form")
+          dir << {"pay"=>pay}
         end
         dir
       end
       def self.visit_payment_history(sess)
         sess.get "/payment_list.php"
+      end
+      def self.visit_payment_link(sess, link)
+        sess.get "#{link}"
       end
     end
   end

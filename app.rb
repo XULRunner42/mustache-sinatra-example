@@ -75,6 +75,7 @@ class App < Sinatra::Base
     table=params[:splat][1]
     column=params[:splat][2]
 
+# bad... try http://stackoverflow.com/a/7941044 QueryParams module
     key=CGI.escape("#{schema}.#{table}.#{column}")
 
     schema=@db.escape(schema)
