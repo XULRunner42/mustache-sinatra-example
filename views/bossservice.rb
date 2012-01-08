@@ -11,7 +11,7 @@ class App
         sess
       end
       def self.visit_boss(sess)
-        sess.timeout=30
+        sess.timeout=60
         sess.handle_cookies("cookies.txt")
         sess.base_url="https://www.bossservice.com/"
         response=sess.get "/index.php"

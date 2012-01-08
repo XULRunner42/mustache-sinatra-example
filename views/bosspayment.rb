@@ -14,7 +14,7 @@ class App
         links('View',content).each do|link|
           htm=Nokogiri::HTML(visit_payment_link(sess,link).body)
           pay=htm.css("form")
-          dir << {"pay"=>pay}
+          dir << pay
         end
         dir
       end

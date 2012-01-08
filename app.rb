@@ -42,7 +42,26 @@ class App < Sinatra::Base
   get '/document/boss/payment*' do |path|
     @title = "BOSS Payment History Report"
 
-    Views::Bosspayment::have ( [{"body"=>Views::Bosspayment::body}] )
+    payments=Views::Bosspayment::body
+    forms=[]
+    payments.each do|form|
+      info=form.xpath("fieldset")[0]
+      detail=form.xpath("fieldset")[1]
+      billing=form.xpath("fieldset")[2]
+      comment=form.xpath("fieldset")[3]
+      extra=form.xpath("fieldset")[4]
+      #puts "####Info:####"
+      #p info
+      #puts "####Detail:####"
+      #p detail
+      #puts "####Billing:####"
+      #p billing
+      data={"info"=>info, "detail"=>detail, "billing"=>billing,
+        "comment"=>comment, "extra"=>extra }
+      forms << data
+    end
+
+    Views::Bosspayment::have ( [{"body"=>forms}] )
     mustache :bosspayment
   end
   get '/document/boss*' do |path|
