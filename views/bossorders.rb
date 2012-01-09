@@ -4,6 +4,7 @@ class App
       def self.body
         sess = login_boss
         orders_page=visit_orders(sess)
+        orders_page_2=visit_orders_2(sess)
 
         html_doc=Nokogiri::HTML(orders_page.body)
         content=html_doc.css("table")
@@ -22,11 +23,19 @@ class App
       end
       def self.footer(sess)
         orders_page=visit_orders(sess)
+        orders_page_2=visit_orders_2(sess)
         html_doc=Nokogiri::HTML(orders_page.body)
+        html_doc_2=Nokogiri::HTML(orders_page_2.body)
 
         content=html_doc.css("div#main-body")
+        content_2=html_doc_2.css("div#main-body")
         dir=[]
         links('View',content).each do|link|
+          htm=Nokogiri::HTML(visit_order_view(sess,link).body)
+          track=htm.css("form")
+          dir << track
+        end
+        links('View',content_2).each do|link|
           htm=Nokogiri::HTML(visit_order_view(sess,link).body)
           track=htm.css("form")
           dir << track
@@ -35,6 +44,9 @@ class App
       end
       def self.visit_orders(sess)
         sess.get "/order_list.php"
+      end
+      def self.visit_orders_2(sess)
+        sess.get "/order_list.php?order_by=so.so_date&order_dir=DESC&txtFromDate=10%2F08%2F2011&txtToDate=01%2F08%2F2012&page=2"
       end
       def self.visit_order_view(sess, link)
         sess.get "#{link}"        
