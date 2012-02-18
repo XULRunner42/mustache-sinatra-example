@@ -18,7 +18,6 @@ class App < Sinatra::Base
   require 'patron'
   require 'nokogiri'
   require 'queryparams'
-  require 'mysql2'
 
   def initialize
     super
@@ -89,6 +88,7 @@ class App < Sinatra::Base
     mustache :document
   end
 
+=begin
   get '/reports/undocumented/tables/mmi' do
     param={"table_schema"=>"mmi1"}
 
@@ -116,6 +116,7 @@ class App < Sinatra::Base
     record = { "schema" => schema, "table" => table, "column" =>
       column, "notes" => notes, "status" => status }
 
+    # the forbidden MySQL
     Views::Fieldedit::update(db, record)
 
     redirect "/reports/undocumented/fields/#{key}"
@@ -137,4 +138,5 @@ class App < Sinatra::Base
     content_type 'text/plain'
     mustache :nolayout, :layout => false
   end
+=end
 end

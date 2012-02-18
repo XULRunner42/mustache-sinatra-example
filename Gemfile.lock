@@ -4,7 +4,6 @@ GEM
     addressable (2.2.6)
     awesome_print (1.0.2)
     mustache (0.99.4)
-    mysql2 (0.3.11)
     nokogiri (1.5.0)
     patron (0.4.16)
     queryparams (0.0.3)
@@ -26,7 +25,6 @@ DEPENDENCIES
   addressable
   awesome_print
   mustache
-  mysql2
   nokogiri
   patron
   queryparams
