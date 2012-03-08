@@ -1,3 +1,15 @@
+
+#      def self.visit_orders(sess)
+#        sess.get "/order_list.php"
+#      end
+#      def self.visit_orders_2(sess)
+#        sess.get "/order_list.php?order_by=so.so_date&order_dir=DESC&txtFromDate=10%2F08%2F2011&txtToDate=01%2F08%2F2012&page=2"
+#      end
+# Resources to-Date
+# https://www.bossservice.com/order_list.php?txtSoNo=&txtPoNo=&cmbType=&cmbStatus=&txtFromDate=01%2F01%2F2011&txtToDate=03%2F08%2F2012&order_by=so.so_date&order_dir=DESC&page=1
+
+# https://www.bossservice.com/order_list.php?txtSoNo=&txtPoNo=&cmbType=&cmbStatus=&txtFromDate=01%2F01%2F2011&txtToDate=03%2F08%2F2012&order_by=so.so_date&order_dir=DESC&page=2
+# https://www.bossservice.com/order_list.php?txtSoNo=&txtPoNo=&cmbType=&cmbStatus=&txtFromDate=01%2F01%2F2011&txtToDate=03%2F08%2F2012&order_by=so.so_date&order_dir=DESC&page=3
 class App
   module Views
     class Bossorders < Bossservice
@@ -41,12 +53,6 @@ class App
           dir << track
         end
         dir
-      end
-      def self.visit_orders(sess)
-        sess.get "/order_list.php"
-      end
-      def self.visit_orders_2(sess)
-        sess.get "/order_list.php?order_by=so.so_date&order_dir=DESC&txtFromDate=10%2F08%2F2011&txtToDate=01%2F08%2F2012&page=2"
       end
       def self.visit_order_view(sess, link)
         sess.get "#{link}"        

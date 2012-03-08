@@ -6,6 +6,7 @@ class App
       end
       def self.login_boss
         sess=Patron::Session.new
+        sess.timeout=60
         response=visit_boss(sess)
         html_doc=Nokogiri::HTML(response.body)
         form=html_doc.css("form")
@@ -14,7 +15,6 @@ class App
         sess
       end
       def self.visit_boss(sess)
-        sess.timeout=60
         sess.handle_cookies("cookies.txt")
         sess.base_url="https://www.bossservice.com/"
         response=sess.get "/index.php"
