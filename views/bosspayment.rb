@@ -1,3 +1,6 @@
+
+# https://www.bossservice.com/payment_list.php?txtPaymentNo=&txtFromDate=01%2F01%2F2011&txtToDate=03%2F08%2F2012&order_by=p.payment_time&order_dir=DESC&page=2
+# Resources
 class App
   module Views
     class Bosspayment < Bossservice
@@ -16,7 +19,7 @@ class App
         dir
       end
       def self.visit_payment_history(sess)
-        sess.get "/payment_list.php"
+        sess.get "/payment_list.php?txtPaymentNo=&txtFromDate=01%2F01%2F2011&txtToDate=03%2F08%2F2012&order_by=p.payment_time&order_dir=DESC&page=1"
       end
       def self.visit_payment_link(sess, link)
         sess.get "#{link}"
