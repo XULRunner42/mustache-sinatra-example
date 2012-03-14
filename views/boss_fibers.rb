@@ -10,11 +10,12 @@ class BossFibers
   end
   def payments
     Fiber.new do
-      get_payment
+      html_doc = Nokogiri::HTML(File.new("#{$FOO}/out/payment.html",'r'))
     end
   end
   def orders_vs_payments
-    nok = orders.resume
-    ap nok
+    parse_orders = orders.resume
+    parse_payments = payments.resume
+# Now what?
   end
 end
