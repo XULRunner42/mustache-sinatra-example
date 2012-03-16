@@ -1,5 +1,6 @@
 source :rubygems
 
+gem 'thor'
 gem "mustache"
 gem "sinatra"
 gem "shotgun"
