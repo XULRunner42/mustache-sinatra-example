@@ -17,5 +17,8 @@ class BossFibers
     parse_orders = orders.resume
     parse_payments = payments.resume
 # Now what?
+    #[parse_orders, parse_payments]
+    puts parse_orders
+    puts parse_payments
   end
 end
