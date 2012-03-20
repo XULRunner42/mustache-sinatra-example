@@ -12,8 +12,13 @@ class BossFibers
         @inventory.xpath("//tr/td[3]"),
         @inventory.xpath("//tr/td[4]")
         ]
-      while true do 
-	Fiber.yield data.map(&:pop)
+
+      while data[0].length > 0 do
+        if data[0].text=="\u00A0" # non-breaking space
+          break # signals EOF in gmail spreadsheet doc
+        else
+          Fiber.yield data.map(&:shift)
+        end
       end
     end
   end
