@@ -1,18 +1,19 @@
 require 'nokogiri'
 require 'ap'
 
-$FOO = "/home/yebyen/Desktop/ergoback"
+$FOO = "/home/yebyen/ruby-ergoback/mustache-sinatra-example"
 class BossFibers
   def inventory
     Fiber.new do
       @inventory = Nokogiri::HTML(File.new("#{$FOO}/INVENTORY.html",'r'))
-      while true do 
-	Fiber.yield [
+      data = [
         @inventory.xpath("//tr/td[1]"),
         @inventory.xpath("//tr/td[2]"),
         @inventory.xpath("//tr/td[3]"),
         @inventory.xpath("//tr/td[4]")
-        ].map(&:pop)
+        ]
+      while true do 
+	Fiber.yield data.map(&:pop)
       end
     end
   end
