@@ -11,6 +11,7 @@ class App < Sinatra::Base
   require 'views/bossservice'
   require 'views/bosspayment'
   require 'views/bossorders'
+  require 'views/boss_reduce'
   require 'views/listing'
   require 'views/flist'
   require 'views/fieldedit'
@@ -39,6 +40,11 @@ class App < Sinatra::Base
     mustache :other
   end
 
+  get '/document/boss/reduce' do
+    summary = Views::BossReduce::body
+    Views::BossReduce::have( summary )
+    mustache :boss_reduce
+  end
   get '/document/boss/orders*' do |path|
     orders=Views::Bossorders::body
     #orders.each do|form|
